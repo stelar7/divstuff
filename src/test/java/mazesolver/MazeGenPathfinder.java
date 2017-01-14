@@ -1,5 +1,6 @@
-package pathfinding;
+package mazesolver;
 
+import mazeGenetation.generator.*;
 import org.joml.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -12,12 +13,13 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class Pathfinder
+public class MazeGenPathfinder
 {
 	private final Object lock = new Object();
 	PathfinderSolver solver;
+	MazeGenerator    generator;
 	Vector2i mazeSize  = new Vector2i(750, 750);
-	Vector2i cellCount = new Vector2i(75, 75);
+	Vector2i cellCount = new Vector2i(100, 100);
 	private long window;
 	private int      WIDTH  = 800;
 	private int      HEIGHT = 800;
@@ -25,7 +27,7 @@ public class Pathfinder
 	
 	public static void main(String[] args)
 	{
-		new Pathfinder().run();
+		new MazeGenPathfinder().run();
 	}
 	
 	public void run()
@@ -84,34 +86,6 @@ public class Pathfinder
 		                               }
 		                              );
 		
-		glfwSetKeyCallback(window, (window, key, code, action, mods) ->
-		{
-			if (key == GLFW_KEY_H && action == GLFW_RELEASE)
-			{
-				HeuristicType lastType = solver.getHeuristicType();
-				HeuristicType nextType = HeuristicType.values()[(lastType.ordinal() + 1) % HeuristicType.values().length];
-				
-				solver = new HeuristicSolver(mazeSize, cellCount);
-				solver.setHeuristicType(nextType);
-				
-				System.out.format("Swapped to : %s%n", solver.getHeuristicType());
-			}
-			
-			if (key == GLFW_KEY_KP_ADD && action == GLFW_RELEASE)
-			{
-				cellCount.add(1, 1);
-				solver = new HeuristicSolver(mazeSize, cellCount);
-				System.out.println(cellCount);
-			}
-			if (key == GLFW_KEY_KP_SUBTRACT && action == GLFW_RELEASE)
-			{
-				cellCount.sub(1, 1);
-				solver = new HeuristicSolver(mazeSize, cellCount);
-			}
-			
-		});
-		
-		
 		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowPos(window, (vidmode.width() - WIDTH) / 2, (vidmode.height() - HEIGHT) / 2);
 		
@@ -132,7 +106,7 @@ public class Pathfinder
 		int   loops;
 		float interp;
 		
-		int updatesPerSecond = 100;
+		int updatesPerSecond = 1000;
 		int skipInterval     = 1000 / updatesPerSecond;
 		int maxFramesSkipped = 1000 * 2000;
 		
@@ -180,23 +154,46 @@ public class Pathfinder
 	
 	private void initPostGL()
 	{
-		solver = new HeuristicSolver(mazeSize, cellCount);
+		generator = new RecurciveBacktrackingMazeGenerator(mazeSize, cellCount);
 	}
 	
 	private void update()
 	{
-		solver.nextStep();
+		if (!generator.isFinished())
+		{
+			generator.nextStep();
+		} else
+		{
+			if (solver == null)
+			{
+				solver = new MazeGeneratorSolver(mazeSize, cellCount, generator.getCells());
+			}
+			solver.nextStep();
+		}
 	}
 	
 	private void render(final float interp)
 	{
+		int xoffset = 30;
+		int yoffset = 40;
+		
 		glViewport(0, 0, WIDTH, HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glTranslatef(25, 25, 0);
+		glTranslatef(xoffset, yoffset, 0);
 		
-		solver.render();
+		if (!generator.isFinished())
+		{
+			generator.render();
+		} else
+		{
+			if (solver != null)
+			{
+				solver.render();
+			}
+		}
 		
-		glTranslatef(-25, -25, 0);
+		glTranslatef(-xoffset, -yoffset, 0);
+		
 	}
 	
 }

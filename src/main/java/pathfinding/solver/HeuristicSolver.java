@@ -4,24 +4,22 @@ import org.joml.*;
 
 import java.util.*;
 
-public class DijkstraSolver extends PathfinderSolver
+public class HeuristicSolver extends PathfinderSolver
 {
 	
 	List<Node> openSet   = new ArrayList<>();
 	List<Node> closedSet = new ArrayList<>();
 	List<Node> path      = new ArrayList<>();
 	List<Node> grid      = new ArrayList<>();
-	
-	float w = cellSize.x;
-	float h = cellSize.y;
-	
+	float      w         = cellSize.x;
+	float      h         = cellSize.y;
 	Node start;
 	Node current;
 	Node end;
-	
 	boolean doneSearching = false;
 	
-	public DijkstraSolver(final Vector2i mazeSize, final Vector2i cellCount)
+	
+	public HeuristicSolver(final Vector2i mazeSize, final Vector2i cellCount)
 	{
 		super(mazeSize, cellCount);
 		
@@ -32,29 +30,18 @@ public class DijkstraSolver extends PathfinderSolver
 				grid.add(new Node(x, y, true));
 			}
 		}
-		grid.forEach(n -> n.allowDiagonal = false);
+		grid.forEach(n -> n.allowDiagonal = true);
 		grid.forEach(n -> n.addNeighbors(grid));
 		
-		start = getNodeAt(grid, 0, 0);
+		start = Node.getNodeAt(grid, 0, 0);
 		start.isWall = false;
 		
-		end = getNodeAt(grid, cellCount.x - 1, cellCount.y - 1);
+		end = Node.getNodeAt(grid, cellCount.x - 1, cellCount.y - 1);
 		end.isWall = false;
 		
 		openSet.add(start);
 	}
 	
-	protected static Node getNodeAt(final List<Node> nodes, final int x, final int y)
-	{
-		for (final Node node : nodes)
-		{
-			if (node.pos.x == x && node.pos.y == y)
-			{
-				return node;
-			}
-		}
-		return null;
-	}
 	
 	@Override
 	public void nextStep()
@@ -142,26 +129,27 @@ public class DijkstraSolver extends PathfinderSolver
 			}
 		}
 		
+		
 		for (final Node node : closedSet)
 		{
-			node.setColor(1, 0, 0);
+			node.setColor(Node.closedColor);
 		}
 		
 		for (final Node node : openSet)
 		{
-			node.setColor(0, 1, 0);
+			node.setColor(Node.openColor);
 		}
 		
 		for (final Node node : path)
 		{
-			node.setColor(0, 0, 1);
+			node.setColor(Node.pathColor);
 		}
 		
 		if (doneSearching)
 		{
 			for (final Node node : path)
 			{
-				node.setColor(1, 0, 0.75f);
+				node.setColor(Node.finalColor);
 			}
 		}
 		
@@ -169,11 +157,7 @@ public class DijkstraSolver extends PathfinderSolver
 		{
 			node.render(mazeSize, cellSize);
 		}
+		
 	}
 	
-	@Override
-	public float heuristic(final Node a, final Node b)
-	{
-		return 0; // Dijkstra's algorithm is a case of A* where h(x) is constant
-	}
 }

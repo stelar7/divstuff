@@ -1,19 +1,25 @@
 package pathfinding.solver;
 
+import lombok.*;
 import org.joml.*;
 import renderer.*;
 
 import java.util.*;
 
 import static org.lwjgl.opengl.GL11.*;
-import static pathfinding.solver.DijkstraSolver.*;
 
+@Getter
+@Setter
 public class Node
 {
 	
-	private static final Random random = new Random();
-	float f;
+	public static final  Vector3f openColor   = new Vector3f(0, 1, 0);
+	public static final  Vector3f closedColor = new Vector3f(1, 0, 0);
+	public static final  Vector3f pathColor   = new Vector3f(0, 0, 1);
+	public static final  Vector3f finalColor  = new Vector3f(1, 0, 0.75f);
+	private static final Random   random      = new Random();
 	float g;
+	float f;
 	float h;
 	float      wallChance = 0.1f;
 	List<Node> neighbors  = new ArrayList<>();
@@ -32,6 +38,18 @@ public class Node
 			isWall = random.nextFloat() < wallChance;
 		}
 		
+	}
+	
+	protected static Node getNodeAt(final List<Node> nodes, final int x, final int y)
+	{
+		for (final Node node : nodes)
+		{
+			if (node.pos.x == x && node.pos.y == y)
+			{
+				return node;
+			}
+		}
+		return null;
 	}
 	
 	public void render(final Vector2i mazeSize, final Vector2f size)
@@ -64,8 +82,13 @@ public class Node
 		neighbors.removeIf(Objects::isNull);
 	}
 	
-	public void setColor(final float x, final float y, final float z)
+	public void setColor(final float r, final float g, final float b)
 	{
-		color.set(x, y, z);
+		color.set(r, g, b);
+	}
+	
+	public void setColor(final Vector3f other)
+	{
+		color.set(other);
 	}
 }

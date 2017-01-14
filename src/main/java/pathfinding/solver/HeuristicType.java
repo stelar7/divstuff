@@ -6,6 +6,5 @@ public enum HeuristicType
 	EUCLIDEAN,
 	EUCLIDEAN_SQUARED,
 	DIAGONAL,
-	TIE_BREAK_CROSS,
 	DIJKSTRA
 }
