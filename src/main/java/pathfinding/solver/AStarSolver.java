@@ -200,6 +200,8 @@ public class AStarSolver extends PathfinderSolver
 				return da + db + Math.min(da, db);
 			case TIE_BREAK_CROSS:
 				return (da + db) + Math.min(da, db) + cross;
+			case DIJKSTRA:
+				return 0;
 			default:
 				return 1;
 		}
