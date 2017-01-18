@@ -13,6 +13,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<lwjgl.version>3.1.0</lwjgl.version>
 		<joml.version>1.9.0</joml.version>
+		<sonar.language>java</sonar.language>
 	</properties>
 	<profiles>
 		<profile>

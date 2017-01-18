@@ -52,7 +52,7 @@ public class HeuristicSolver extends PathfinderSolver
 			return;
 		}
 		
-		if (openSet.size() > 0)
+		if (!openSet.isEmpty())
 		{
 			int largestFIndex = 0;
 			for (int i = 0; i < openSet.size(); i++)
@@ -108,7 +108,7 @@ public class HeuristicSolver extends PathfinderSolver
 			}
 		} else
 		{
-			System.out.println("No path found!");
+			logger.info("No path found!");
 			doneSearching = true;
 		}
 	}
@@ -155,7 +155,7 @@ public class HeuristicSolver extends PathfinderSolver
 		
 		for (final Node node : grid)
 		{
-			node.render(mazeSize, cellSize);
+			node.render(cellSize);
 		}
 		
 	}

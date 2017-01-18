@@ -1,5 +1,6 @@
 package pathfinding.solver;
 
+import com.sun.istack.internal.logging.*;
 import org.joml.Math;
 import org.joml.*;
 
@@ -8,7 +9,9 @@ public abstract class PathfinderSolver
 	Vector2f cellSize;
 	Vector2i mazeSize;
 	
-	HeuristicType heuristicType = HeuristicType.DIJKSTRA;
+	Logger logger = Logger.getLogger(PathfinderSolver.class);
+	
+	HeuristicType heuristicType = HeuristicType.EUCLIDEAN;
 	
 	public PathfinderSolver(Vector2i mazeSize, Vector2i cellCount)
 	{
