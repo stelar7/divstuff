@@ -1,4 +1,4 @@
-package mazeGenetation.generator;
+package maze.genetation.generator;
 
 import lombok.*;
 import org.joml.*;
@@ -10,11 +10,11 @@ import java.util.*;
 public abstract class MazeGenerator
 {
     
-    Vector2i   mazeSize;
-    Vector2i   cellCount;
-    List<Cell> cells;
-    Vector2f   cellSize;
-    boolean    finished;
+    protected Vector2i   mazeSize;
+    protected Vector2i   cellCount;
+    protected List<Cell> cells;
+    protected Vector2f   cellSize;
+    protected boolean    finished;
     
     public MazeGenerator(Vector2i mazeSize, Vector2i cellCount)
     {
@@ -27,7 +27,7 @@ public abstract class MazeGenerator
         {
             for (int j = 0; j < cellCount.y; j++)
             {
-                this.cells.add(new Cell(i, j));
+                this.cells.add(new Cell(i, j, cellSize));
             }
         }
     }

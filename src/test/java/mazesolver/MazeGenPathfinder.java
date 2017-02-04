@@ -1,6 +1,6 @@
 package mazesolver;
 
-import mazeGenetation.generator.*;
+import maze.genetation.generator.*;
 import org.joml.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;

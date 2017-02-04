@@ -1,6 +1,6 @@
 package mazesolver;
 
-import mazeGenetation.generator.*;
+import maze.genetation.generator.*;
 import org.joml.*;
 import pathfinding.solver.*;
 
@@ -80,7 +80,7 @@ public class MazeGeneratorSolver extends PathfinderSolver
             
             for (final NodeCell neighbor : current.neighbors)
             {
-                if (!closedSet.contains(neighbor) && !neighbor.cell.hasWall(current.cell)/*!neighbor.isWall*/)
+                if (!closedSet.contains(neighbor) && !neighbor.cell.hasWallTowards(current.cell)/*!neighbor.isWall*/)
                 {
                     
                     float g = current.getG() + heuristic(neighbor, current);

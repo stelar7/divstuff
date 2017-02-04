@@ -1,6 +1,6 @@
 package mazesolver;
 
-import mazeGenetation.generator.*;
+import maze.genetation.generator.*;
 import org.joml.*;
 import pathfinding.solver.*;
 import renderer.*;
@@ -75,6 +75,7 @@ public class NodeCell extends Node
         
         glColor3f(getColor().x, getColor().y, getColor().z);
         Shapes.drawSquare(new Vector2i(x, y).add(halfSizeInt, new Vector2i()), size.sub(halfSize, new Vector2f()));
-        cell.render(mazeSize, size);
+        
+        cell.render();
     }
 }

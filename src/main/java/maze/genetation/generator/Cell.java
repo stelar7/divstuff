@@ -1,4 +1,4 @@
-package mazeGenetation.generator;
+package maze.genetation.generator;
 
 import lombok.*;
 import org.joml.*;
@@ -9,19 +9,38 @@ import java.util.*;
 import static org.lwjgl.opengl.GL11.*;
 
 @Getter
+@Setter
 @ToString
 public class Cell
 {
     
-    Vector2i pos;
-    boolean[] walls   = new boolean[4];
-    boolean   visited = false;
-    Vector3f  color   = new Vector3f(1, 1, 1);
+    private Vector2i pos;
+    private boolean  visited;
     
-    public Cell(int x, int y)
+    private boolean[] walls = new boolean[4];
+    private Vector3f  color = new Vector3f(1, 1, 1);
+    
+    private int xDraw;
+    private int yDraw;
+    
+    private Vector2f tl;
+    private Vector2f tr;
+    private Vector2f bl;
+    private Vector2f br;
+    
+    public Cell(int x, int y, Vector2f size)
     {
         this.pos = new Vector2i(x, y);
         Arrays.fill(walls, true);
+        
+        x = (int) java.lang.Math.floor(pos.x * size.x);
+        y = (int) java.lang.Math.floor(pos.y * size.y);
+        
+        tl = new Vector2f(x, y);
+        tr = new Vector2f(x + size.x, y);
+        bl = new Vector2f(x, y - size.y);
+        br = new Vector2f(x + size.x, y - size.y);
+        
     }
     
     public void setColor(final float r, final float g, final float b)
@@ -29,32 +48,32 @@ public class Cell
         color.set(r, g, b);
     }
     
-    public boolean hasWall(final Cell cell)
+    public boolean hasWallTowards(final Cell cell)
     {
         if (pos.x > cell.pos.x)
         {
-            return hasWall(Direction.LEFT);
+            return hasWallInDirection(Direction.LEFT);
         }
         
         if (pos.x < cell.pos.x)
         {
-            return hasWall(Direction.RIGHT);
+            return hasWallInDirection(Direction.RIGHT);
         }
         
         if (pos.y > cell.pos.y)
         {
-            return hasWall(Direction.DOWN);
+            return hasWallInDirection(Direction.DOWN);
         }
         
         if (pos.y < cell.pos.y)
         {
-            return hasWall(Direction.UP);
+            return hasWallInDirection(Direction.UP);
         }
         
         return true;
     }
     
-    public boolean hasWall(Direction dir)
+    public boolean hasWallInDirection(Direction dir)
     {
         switch (dir)
         {
@@ -92,33 +111,26 @@ public class Cell
         }
     }
     
-    public void render(final Vector2i mazeSize, final Vector2f size)
+    public void render()
     {
-        int x = (int) java.lang.Math.floor(pos.x * size.x);
-        int y = (int) java.lang.Math.floor(pos.y * size.y);
-        
-        Vector2f tl = new Vector2f(x, y);
-        Vector2f tr = new Vector2f(x + size.x, y);
-        Vector2f bl = new Vector2f(x, y - size.y);
-        Vector2f br = new Vector2f(x + size.x, y - size.y);
         
         glColor3f(color.x, color.y, color.z);
-        if (hasWall(Direction.LEFT))
+        if (hasWallInDirection(Direction.LEFT))
         {
             Shapes.drawLine(tl, bl, 1);
         }
         
-        if (hasWall(Direction.UP))
+        if (hasWallInDirection(Direction.UP))
         {
             Shapes.drawLine(tl, tr, 1);
         }
         
-        if (hasWall(Direction.RIGHT))
+        if (hasWallInDirection(Direction.RIGHT))
         {
             Shapes.drawLine(tr, br, 1);
         }
         
-        if (hasWall(Direction.DOWN))
+        if (hasWallInDirection(Direction.DOWN))
         {
             Shapes.drawLine(br, bl, 1);
         }
