@@ -11,14 +11,14 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class Renderer
 {
-    private int swapInterval = 1;
-    private int width        = 800;
-    private int height       = 600;
+    private int width  = 800;
+    private int height = 600;
     
     private final Vector2f cursor = new Vector2f();
     private final Object   lock   = new Object();
     
-    private long window;
+    private long    window;
+    private boolean shouldClose;
     
     public static void main(String[] args)
     {
@@ -33,7 +33,7 @@ public class Renderer
             
             new Thread(this::loop).start();
             
-            while (!glfwWindowShouldClose(window))
+            while (!shouldClose)
             {
                 glfwWaitEvents();
             }
@@ -69,9 +69,9 @@ public class Renderer
             throw new RuntimeException("Failed to create the GLFW window");
         }
         
-        glfwSetCursorPosCallback(window, (window, x, y) -> cursor.set((float) x, (float) y));
+        glfwSetCursorPosCallback(window, (windowPtr, x, y) -> cursor.set((float) x, (float) y));
         
-        glfwSetFramebufferSizeCallback(window, (window, w, h) ->
+        glfwSetFramebufferSizeCallback(window, (windowPtr, w, h) ->
                                        {
                                            if (w > 0 && h > 0)
                                            {
@@ -97,14 +97,13 @@ public class Renderer
         initPostGL();
         
         int   updatesPerSecond = 60;
-        int   maxFramesSkipped = 5;
+        int   maxFramesSkipped = 20;
         float skipInterval     = 1000f / updatesPerSecond;
         
         int ups = 0;
         int fps = 0;
         
         int   loops;
-        float interp;
         
         double timer    = System.currentTimeMillis();
         long   fpstimer = System.currentTimeMillis();
@@ -113,7 +112,7 @@ public class Renderer
         glEnable(GL_DEPTH_TEST);
         glViewport(0, 0, width, height);
         
-        while (!glfwWindowShouldClose(window))
+        while (!shouldClose)
         {
             
             if (System.currentTimeMillis() > fpstimer + 1000)
@@ -132,17 +131,14 @@ public class Renderer
                 timer += skipInterval;
             }
             
-            interp = (System.currentTimeMillis() + skipInterval - (float) timer) / skipInterval;
-            
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glViewport(0, 0, width, height);
-            
-            render(interp);
+            render();
             fps++;
             
             synchronized (lock)
             {
-                if (!glfwWindowShouldClose(window))
+                shouldClose = glfwWindowShouldClose(window);
+                
+                if (!shouldClose)
                 {
                     glfwSwapBuffers(window);
                 }
@@ -152,13 +148,15 @@ public class Renderer
     
     private void initPostGL()
     {
+        // init here
     }
     
     private void update()
     {
+        // logic here
     }
     
-    private void render(final float interp)
+    private void render()
     {
         Shapes.drawTriangle(new Vector2f(width / 2, height / 2), 50);
         glTranslatef(width / 2f, height / 2f, 0);
