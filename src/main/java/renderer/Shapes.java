@@ -7,8 +7,12 @@ import java.util.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class Shapes
+public final class Shapes
 {
+    
+    private Shapes()
+    {
+    }
     
     public static void drawTriangle(Vector2f center, float size)
     {

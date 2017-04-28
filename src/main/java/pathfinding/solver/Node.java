@@ -18,16 +18,16 @@ public class Node
     public static final  Vector3f pathColor   = new Vector3f(0, 0, 1);
     public static final  Vector3f finalColor  = new Vector3f(1, 0.5f, 0.75f);
     private static final Random   random      = new Random();
-    float g;
-    float f;
-    float h;
-    float      wallChance = 0.1f;
-    List<Node> neighbors  = new ArrayList<>();
-    Node previous;
-    boolean isWall        = false;
-    boolean allowDiagonal = false;
-    Vector2i pos;
-    Vector3f color = new Vector3f(1, 1, 1);
+    private float g;
+    private float f;
+    private float h;
+    private float      wallChance = 0.1f;
+    private List<Node> neighbors  = new ArrayList<>();
+    private Node previous;
+    private boolean isWall        = false;
+    private boolean allowDiagonal = false;
+    private Vector2i pos;
+    private Vector3f color = new Vector3f(1, 1, 1);
     
     public Node(int x, int y, boolean useWall)
     {

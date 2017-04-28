@@ -1,4 +1,4 @@
-package travelingSalesman.solver;
+package travelingsalesman.solver;
 
 import org.joml.*;
 
@@ -9,17 +9,27 @@ public abstract class TravelingSalesmanSolver
 {
     protected int bestDistance = Integer.MAX_VALUE;
     
-    long    triedpermutations;
-    float   percent;
-    boolean solved;
+    public void setTriedpermutations(long triedpermutations)
+    {
+        this.triedpermutations = triedpermutations;
+    }
     
-    List<Vector2f> cities;
-    int            WIDTH;
-    int            HEIGHT;
+    public long getTriedpermutations()
+    {
+        return triedpermutations;
+    }
+    
+    protected long    triedpermutations;
+    private   float   percent;
+    private   boolean solved;
+    
+    private   List<Vector2f> cities;
+    protected int            WIDTH;
+    protected int            HEIGHT;
     
     public TravelingSalesmanSolver(final List<Vector2f> cities, final int w, final int h)
     {
-        this.cities = cities;
+        this.cities = new ArrayList<>(cities);
         this.WIDTH = w;
         this.HEIGHT = h;
     }
@@ -40,7 +50,7 @@ public abstract class TravelingSalesmanSolver
     
     protected long factorial(int num)
     {
-        return num == 0 ? 1 : num * factorial(num - 1);
+        return (num == 0) ? 1 : (num * factorial(num - 1));
     }
     
     public boolean isSolved()

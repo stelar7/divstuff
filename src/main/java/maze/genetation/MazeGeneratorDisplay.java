@@ -110,7 +110,6 @@ public class MazeGeneratorDisplay
         int   maxFramesSkipped = 5;
         
         int   loops;
-        float interp;
         
         double timer    = System.currentTimeMillis();
         long   fpstimer = System.currentTimeMillis();
@@ -141,12 +140,10 @@ public class MazeGeneratorDisplay
                 timer += skipInterval;
             }
             
-            interp = (System.currentTimeMillis() + skipInterval - (float) timer) / skipInterval;
-            
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glViewport(0,0,width,height);
             
-            render(interp);
+            render();
             fps++;
             
             synchronized (lock)
@@ -173,7 +170,7 @@ public class MazeGeneratorDisplay
         generator.nextStep();
     }
     
-    private void render(final float interp)
+    private void render()
     {
         glTranslatef(OFFSET_X / 2f, OFFSET_Y, 0);
         generator.render();

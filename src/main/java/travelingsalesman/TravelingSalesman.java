@@ -1,10 +1,10 @@
-package travelingSalesman;
+package travelingsalesman;
 
 import org.joml.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import renderer.*;
-import travelingSalesman.solver.*;
+import travelingsalesman.solver.*;
 
 import java.text.*;
 import java.util.*;
@@ -16,14 +16,16 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class TravelingSalesman
 {
-    private final Object lock = new Object();
-    List<Vector2f> cities = new ArrayList<>();
-    Random         random = new Random();
-    TravelingSalesmanSolver solver;
-    private long window;
+    private final Object         lock   = new Object();
+    private       List<Vector2f> cities = new ArrayList<>();
+    private       Random         random = new Random();
+    private TravelingSalesmanSolver solver;
+    private long                    window;
     private int      WIDTH  = 800;
     private int      HEIGHT = 600;
     private Vector2f cursor = new Vector2f();
+    
+    private boolean shouldClose = false;
     
     public static void main(String[] args)
     {
@@ -38,7 +40,7 @@ public class TravelingSalesman
             
             new Thread(this::loop).start();
             
-            while (!glfwWindowShouldClose(window))
+            while (!shouldClose)
             {
                 glfwWaitEvents();
             }
@@ -74,8 +76,8 @@ public class TravelingSalesman
             throw new RuntimeException("Failed to create the GLFW window");
         }
         
-        glfwSetCursorPosCallback(window, (window, x, y) -> cursor.set((float) x, (float) y));
-        glfwSetMouseButtonCallback(window, (window, button, action, mods) ->
+        glfwSetCursorPosCallback(window, (windowPtr, x, y) -> cursor.set((float) x, (float) y));
+        glfwSetMouseButtonCallback(window, (windowPtr, button, action, mods) ->
         {
             if (action == GLFW_RELEASE && button == GLFW_MOUSE_BUTTON_LEFT)
             {
@@ -110,12 +112,12 @@ public class TravelingSalesman
         int skipInterval     = 1000 / updatesPerSecond;
         int maxFramesSkipped = 1000 * 2000;
         
-        long  timer = System.currentTimeMillis();
-        int   loops;
-        float interp;
+        long timer = System.currentTimeMillis();
+        int  loops;
         
         long fpstimer = System.currentTimeMillis();
-        int  ups, fps = ups = 0;
+        int  ups      = 0;
+        int  fps      = 0;
         
         DecimalFormat nf = new DecimalFormat("###.##%");
         
@@ -141,14 +143,13 @@ public class TravelingSalesman
                 ups++;
                 
             }
-            interp = (float) (System.currentTimeMillis() + skipInterval - timer) / (float) skipInterval;
-            
-            render(interp);
+            render();
             fps++;
             
             synchronized (lock)
             {
-                if (!glfwWindowShouldClose(window))
+                shouldClose = glfwWindowShouldClose(window);
+                if (!shouldClose)
                 {
                     glfwSwapBuffers(window);
                 }
@@ -158,7 +159,7 @@ public class TravelingSalesman
     
     private void initPostGL()
     {
-        int totalCities = 20;
+        int totalCities = 12;
         for (int i = 0; i < totalCities; i++)
         {
             cities.add(new Vector2f(random.nextInt(WIDTH), random.nextInt(HEIGHT)));
@@ -175,7 +176,7 @@ public class TravelingSalesman
         }
     }
     
-    private void render(final float interp)
+    private void render()
     {
         glViewport(0, 0, WIDTH, HEIGHT);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

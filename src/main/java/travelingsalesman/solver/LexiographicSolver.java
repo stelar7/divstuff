@@ -1,4 +1,4 @@
-package travelingSalesman.solver;
+package travelingsalesman.solver;
 
 import org.joml.*;
 import renderer.*;
@@ -10,8 +10,8 @@ import static org.lwjgl.opengl.GL11.*;
 public class LexiographicSolver extends TravelingSalesmanSolver
 {
     
-    Integer[] order;
-    Integer[] bestOrder;
+    private Integer[] order;
+    private Integer[] bestOrder;
     
     public LexiographicSolver(final List<Vector2f> cities, final int w, final int h)
     {
@@ -27,17 +27,11 @@ public class LexiographicSolver extends TravelingSalesmanSolver
         
     }
     
-    private void swap(Integer[] a, int i, int j)
-    {
-        Integer temp = a[i];
-        a[i] = a[j];
-        a[j] = temp;
-    }
     
     @Override
     public void nextStep()
     {
-        if (solved)
+        if (isSolved())
         {
             return;
         }
@@ -76,7 +70,7 @@ public class LexiographicSolver extends TravelingSalesmanSolver
         }
         
         
-        int dist = distance(cities, order);
+        int dist = distance(getCities(), order);
         
         if (dist < bestDistance)
         {
@@ -108,10 +102,10 @@ public class LexiographicSolver extends TravelingSalesmanSolver
         glBegin(GL_LINE_STRIP);
         for (final Integer o : order)
         {
-            glVertex3f(cities.get(o).x, cities.get(o).y, 0);
+            glVertex3f(getCities().get(o).x, getCities().get(o).y, 0);
         }
         glEnd();
-        for (Vector2f city1 : cities)
+        for (Vector2f city1 : getCities())
         {
             Shapes.drawFilledCircle(city1, 8);
         }
@@ -122,11 +116,11 @@ public class LexiographicSolver extends TravelingSalesmanSolver
         glBegin(GL_LINE_STRIP);
         for (final Integer o : bestOrder)
         {
-            glVertex3f(cities.get(o).x, cities.get(o).y, 0);
+            glVertex3f(getCities().get(o).x, getCities().get(o).y, 0);
         }
         glEnd();
         
-        for (Vector2f city1 : cities)
+        for (Vector2f city1 : getCities())
         {
             Shapes.drawFilledCircle(city1, 10);
         }

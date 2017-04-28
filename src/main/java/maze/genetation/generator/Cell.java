@@ -28,18 +28,18 @@ public class Cell
     private Vector2f bl;
     private Vector2f br;
     
-    public Cell(int x, int y, Vector2f size)
+    public Cell(final int x, final int y, Vector2f size)
     {
         this.pos = new Vector2i(x, y);
         Arrays.fill(walls, true);
         
-        x = (int) java.lang.Math.floor(pos.x * size.x);
-        y = (int) java.lang.Math.floor(pos.y * size.y);
+        int localx = (int) java.lang.Math.floor(pos.x * size.x);
+        int localy = (int) java.lang.Math.floor(pos.y * size.y);
         
-        tl = new Vector2f(x, y);
-        tr = new Vector2f(x + size.x, y);
-        bl = new Vector2f(x, y - size.y);
-        br = new Vector2f(x + size.x, y - size.y);
+        tl = new Vector2f(localx, localy);
+        tr = new Vector2f(localx + size.x, localy);
+        bl = new Vector2f(localx, localy - size.y);
+        br = new Vector2f(localx + size.x, localy - size.y);
         
     }
     

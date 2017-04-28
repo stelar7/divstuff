@@ -1,4 +1,4 @@
-package travelingSalesman.solver;
+package travelingsalesman.solver;
 
 import org.joml.*;
 import renderer.*;
@@ -9,8 +9,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class RandomSolver extends TravelingSalesmanSolver
 {
-    List<Vector2f> bestCities = new ArrayList<>();
-    Random         random     = new Random();
+    private List<Vector2f> bestCities = new ArrayList<>();
+    private Random         random     = new Random();
     
     public RandomSolver(List<Vector2f> cities, int h, int w)
     {
@@ -20,23 +20,24 @@ public class RandomSolver extends TravelingSalesmanSolver
     @Override
     public void nextStep()
     {
-        if (solved)
+        if (isSolved())
         {
             return;
         }
         
-        triedpermutations++;
+        setTriedpermutations(triedpermutations + 1);
         final float percentDone = (float) getPermutationsDone() / factorial(getCities().size());
         setPercent(percentDone);
-        setSolved(percentDone > 1); // assume this is done when we have tried n! combinations
+        // assume this is done when we have tried n! combinations
+        setSolved(percentDone > 1);
         
         
-        Collections.swap(cities, random.nextInt(cities.size()), random.nextInt(cities.size()));
+        Collections.swap(getCities(), random.nextInt(getCities().size()), random.nextInt(getCities().size()));
         
-        int dist = distance(cities);
+        int dist = distance(getCities());
         if (dist < bestDistance)
         {
-            bestCities = new ArrayList<>(cities);
+            bestCities = new ArrayList<>(getCities());
             bestDistance = dist;
         }
         
@@ -61,12 +62,12 @@ public class RandomSolver extends TravelingSalesmanSolver
         glColor3f(1, 1, 1);
         glLineWidth(1);
         glBegin(GL_LINE_STRIP);
-        for (Vector2f city : cities)
+        for (Vector2f city : getCities())
         {
             glVertex3f(city.x, city.y, 0);
         }
         glEnd();
-        for (Vector2f city1 : cities)
+        for (Vector2f city1 : getCities())
         {
             Shapes.drawFilledCircle(city1, 8);
         }
@@ -80,7 +81,7 @@ public class RandomSolver extends TravelingSalesmanSolver
             glVertex3f(city.x, city.y, 0);
         }
         glEnd();
-        for (Vector2f city1 : cities)
+        for (Vector2f city1 : getCities())
         {
             Shapes.drawFilledCircle(city1, 8);
         }

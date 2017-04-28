@@ -5,8 +5,6 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import pathfinding.solver.*;
 
-import java.text.*;
-
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -15,9 +13,9 @@ import static org.lwjgl.system.MemoryUtil.*;
 public class Pathfinder
 {
     private final Object lock = new Object();
-    PathfinderSolver solver;
-    Vector2i mazeSize  = new Vector2i(750, 750);
-    Vector2i cellCount = new Vector2i(75, 75);
+    private PathfinderSolver solver;
+    private Vector2i mazeSize  = new Vector2i(750, 750);
+    private Vector2i cellCount = new Vector2i(75, 75);
     private long window;
     private int      WIDTH  = 800;
     private int      HEIGHT = 800;
@@ -72,9 +70,9 @@ public class Pathfinder
             throw new RuntimeException("Failed to create the GLFW window");
         }
         
-        glfwSetCursorPosCallback(window, (window, x, y) -> cursor.set((float) x, (float) y));
+        glfwSetCursorPosCallback(window, (windowPtr, x, y) -> cursor.set((float) x, (float) y));
         
-        glfwSetFramebufferSizeCallback(window, (window, w, h) ->
+        glfwSetFramebufferSizeCallback(window, (windowPtr, w, h) ->
                                        {
                                            if (w > 0 && h > 0)
                                            {
@@ -84,7 +82,7 @@ public class Pathfinder
                                        }
                                       );
         
-        glfwSetKeyCallback(window, (window, key, code, action, mods) ->
+        glfwSetKeyCallback(window, (windowPtr, key, code, action, mods) ->
         {
             if (key == GLFW_KEY_H && action == GLFW_RELEASE)
             {
@@ -128,18 +126,16 @@ public class Pathfinder
         initPostGL();
         
         
-        long  timer = System.currentTimeMillis();
-        int   loops;
-        float interp;
+        long timer = System.currentTimeMillis();
+        int  loops;
         
         int updatesPerSecond = 100;
         int skipInterval     = 1000 / updatesPerSecond;
         int maxFramesSkipped = 1000 * 2000;
         
-        DecimalFormat nf = new DecimalFormat("###.##%");
-        
         long fpstimer = System.currentTimeMillis();
-        int  ups, fps = ups = 0;
+        int  ups      = 0;
+        int  fps      = 0;
         
         glOrtho(0, WIDTH, HEIGHT, 0, 1, -1);
         glEnable(GL_DEPTH_TEST);
@@ -149,7 +145,7 @@ public class Pathfinder
             if (System.currentTimeMillis() > fpstimer + 1000)
             {
                 fpstimer = System.currentTimeMillis();
-                //System.out.println("FPS:" + fps);
+                System.out.println("FPS:" + fps);
                 System.out.println("UPS:" + ups);
                 fps = ups = 0;
             }
@@ -163,9 +159,7 @@ public class Pathfinder
                 ups++;
                 
             }
-            interp = (float) (System.currentTimeMillis() + skipInterval - timer) / (float) skipInterval;
-            
-            render(interp);
+            render();
             fps++;
             
             synchronized (lock)
@@ -188,7 +182,7 @@ public class Pathfinder
         solver.nextStep();
     }
     
-    private void render(final float interp)
+    private void render()
     {
         glViewport(0, 0, WIDTH, HEIGHT);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
