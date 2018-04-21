@@ -1,6 +1,5 @@
 package maze.genetation.generator;
 
-import lombok.*;
 import org.joml.*;
 import renderer.*;
 
@@ -8,9 +7,6 @@ import java.util.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
-@Getter
-@Setter
-@ToString
 public class Cell
 {
     
@@ -41,6 +37,106 @@ public class Cell
         bl = new Vector2f(localx, localy - size.y);
         br = new Vector2f(localx + size.x, localy - size.y);
         
+    }
+    
+    public Vector2i getPos()
+    {
+        return pos;
+    }
+    
+    public void setPos(Vector2i pos)
+    {
+        this.pos = pos;
+    }
+    
+    public boolean isVisited()
+    {
+        return visited;
+    }
+    
+    public void setVisited(boolean visited)
+    {
+        this.visited = visited;
+    }
+    
+    public boolean[] getWalls()
+    {
+        return walls;
+    }
+    
+    public void setWalls(boolean[] walls)
+    {
+        this.walls = walls;
+    }
+    
+    public Vector3f getColor()
+    {
+        return color;
+    }
+    
+    public void setColor(Vector3f color)
+    {
+        this.color = color;
+    }
+    
+    public int getxDraw()
+    {
+        return xDraw;
+    }
+    
+    public void setxDraw(int xDraw)
+    {
+        this.xDraw = xDraw;
+    }
+    
+    public int getyDraw()
+    {
+        return yDraw;
+    }
+    
+    public void setyDraw(int yDraw)
+    {
+        this.yDraw = yDraw;
+    }
+    
+    public Vector2f getTl()
+    {
+        return tl;
+    }
+    
+    public void setTl(Vector2f tl)
+    {
+        this.tl = tl;
+    }
+    
+    public Vector2f getTr()
+    {
+        return tr;
+    }
+    
+    public void setTr(Vector2f tr)
+    {
+        this.tr = tr;
+    }
+    
+    public Vector2f getBl()
+    {
+        return bl;
+    }
+    
+    public void setBl(Vector2f bl)
+    {
+        this.bl = bl;
+    }
+    
+    public Vector2f getBr()
+    {
+        return br;
+    }
+    
+    public void setBr(Vector2f br)
+    {
+        this.br = br;
     }
     
     public void setColor(final float r, final float g, final float b)

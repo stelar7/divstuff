@@ -87,11 +87,6 @@
             <artifactId>joml</artifactId>
             <version>${joml.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>LATEST</version>
-        </dependency>
     </dependencies>
 
     <build>

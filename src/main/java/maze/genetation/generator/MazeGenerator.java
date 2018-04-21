@@ -1,12 +1,9 @@
 package maze.genetation.generator;
 
-import lombok.*;
 import org.joml.*;
 
 import java.util.*;
 
-@Getter
-@ToString
 public abstract class MazeGenerator
 {
     
@@ -32,6 +29,50 @@ public abstract class MazeGenerator
         }
     }
     
+    public Vector2i getMazeSize()
+    {
+        return mazeSize;
+    }
+    
+    public void setMazeSize(Vector2i mazeSize)
+    {
+        this.mazeSize = mazeSize;
+    }
+    
+    public Vector2i getCellCount()
+    {
+        return cellCount;
+    }
+    
+    public void setCellCount(Vector2i cellCount)
+    {
+        this.cellCount = cellCount;
+    }
+    
+    public List<Cell> getCells()
+    {
+        return cells;
+    }
+    
+    public void setCells(List<Cell> cells)
+    {
+        this.cells = cells;
+    }
+    
+    public Vector2f getCellSize()
+    {
+        return cellSize;
+    }
+    
+    public void setCellSize(Vector2f cellSize)
+    {
+        this.cellSize = cellSize;
+    }
+    
+    public void setFinished(boolean finished)
+    {
+        this.finished = finished;
+    }
     
     public abstract void nextStep();
     

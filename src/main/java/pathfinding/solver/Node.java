@@ -1,6 +1,5 @@
 package pathfinding.solver;
 
-import lombok.*;
 import org.joml.*;
 import renderer.*;
 
@@ -8,8 +7,6 @@ import java.util.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
-@Getter
-@Setter
 public class Node
 {
     
@@ -28,6 +25,126 @@ public class Node
     private boolean allowDiagonal = false;
     private Vector2i pos;
     private Vector3f color = new Vector3f(1, 1, 1);
+    
+    public void setG(float g)
+    {
+        this.g = g;
+    }
+    
+    public void setF(float f)
+    {
+        this.f = f;
+    }
+    
+    public void setH(float h)
+    {
+        this.h = h;
+    }
+    
+    public void setWallChance(float wallChance)
+    {
+        this.wallChance = wallChance;
+    }
+    
+    public void setNeighbors(List<Node> neighbors)
+    {
+        this.neighbors = neighbors;
+    }
+    
+    public void setPrevious(Node previous)
+    {
+        this.previous = previous;
+    }
+    
+    public void setWall(boolean wall)
+    {
+        isWall = wall;
+    }
+    
+    public void setAllowDiagonal(boolean allowDiagonal)
+    {
+        this.allowDiagonal = allowDiagonal;
+    }
+    
+    public void setPos(Vector2i pos)
+    {
+        this.pos = pos;
+    }
+    
+    public static Vector3f getOpenColor()
+    {
+        return openColor;
+    }
+    
+    public static Vector3f getClosedColor()
+    {
+        return closedColor;
+    }
+    
+    public static Vector3f getPathColor()
+    {
+        return pathColor;
+    }
+    
+    public static Vector3f getFinalColor()
+    {
+        return finalColor;
+    }
+    
+    public static Random getRandom()
+    {
+        return random;
+    }
+    
+    public float getG()
+    {
+        return g;
+    }
+    
+    public float getF()
+    {
+        return f;
+    }
+    
+    public float getH()
+    {
+        return h;
+    }
+    
+    public float getWallChance()
+    {
+        return wallChance;
+    }
+    
+    public List<Node> getNeighbors()
+    {
+        return neighbors;
+    }
+    
+    public Node getPrevious()
+    {
+        return previous;
+    }
+    
+    public boolean isWall()
+    {
+        return isWall;
+    }
+    
+    public boolean isAllowDiagonal()
+    {
+        return allowDiagonal;
+    }
+    
+    public Vector2i getPos()
+    {
+        return pos;
+    }
+    
+    public Vector3f getColor()
+    {
+        return color;
+    }
     
     public Node(int x, int y, boolean useWall)
     {
