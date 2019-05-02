@@ -4,6 +4,7 @@ import org.joml.*;
 import renderer.*;
 
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -17,8 +18,10 @@ public class RayMarcherDisplay extends Renderer
     
     RayMarcher ray;
     
-    List<Circle> circles = new ArrayList<>();
-    List<Float>  lengths = new ArrayList<>();
+    List<Circle> circles  = new ArrayList<>();
+    List<Float>  lengths  = new ArrayList<>();
+    Vector2f     hitPoint = new Vector2f();
+    Circle       hitObj   = new Circle(new Vector2f(), 0);
     
     @Override
     public void initPostGL()
@@ -42,7 +45,12 @@ public class RayMarcherDisplay extends Renderer
     @Override
     public void update()
     {
+        circles.forEach(c -> c.update(screenBounds));
+        
+        ray.lookAt(cursor);
         lengths = ray.march(circles, screenBounds);
+        hitPoint = ray.marchGetHitPoint(circles, screenBounds);
+        hitObj = ray.marchGetHitCircle(circles, screenBounds);
     }
     
     @Override
@@ -51,7 +59,12 @@ public class RayMarcherDisplay extends Renderer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         ray.render(lengths);
-        
         circles.forEach(Circle::render);
+        
+        Shapes.drawFilledCircle(hitPoint, 4);
+        if (hitObj != null)
+        {
+            hitObj.renderHighlight();
+        }
     }
 }

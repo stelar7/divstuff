@@ -18,14 +18,19 @@ public class RayMarcher
         this.dir = dir;
     }
     
+    public void lookAt(Vector2f dir)
+    {
+        this.dir.x = dir.x - this.pos.x;
+        this.dir.y = dir.y - this.pos.y;
+        this.dir.normalize();
+    }
+    
     public List<Float> march(List<Circle> objs, Vector2i screenBounds)
     {
         List<Float> returnPoints = new ArrayList<>();
         
         Vector2f current = new Vector2f(this.pos);
-        
-        int counter = 0;
-        while (counter++ < 1000)
+        while (true)
         {
             float best = Float.MAX_VALUE;
             for (Circle obj : objs)
@@ -47,6 +52,60 @@ public class RayMarcher
         }
         
         return returnPoints;
+    }
+    
+    public Vector2f marchGetHitPoint(List<Circle> objs, Vector2i screenBounds)
+    {
+        Vector2f current = new Vector2f(this.pos);
+        while (true)
+        {
+            float best = Float.MAX_VALUE;
+            for (Circle obj : objs)
+            {
+                float dist = obj.signedDistance(current);
+                if (dist < best)
+                {
+                    best = dist;
+                }
+            }
+            
+            current.add(dir.mul(best, new Vector2f()));
+            if (best < 0.1 || isOffscreen(current, screenBounds))
+            {
+                return current;
+            }
+        }
+    }
+    
+    public Circle marchGetHitCircle(List<Circle> objs, Vector2i screenBounds)
+    {
+        Vector2f current = new Vector2f(this.pos);
+        
+        Circle hit = null;
+        while (true)
+        {
+            float best = Float.MAX_VALUE;
+            for (Circle obj : objs)
+            {
+                float dist = obj.signedDistance(current);
+                if (dist < best)
+                {
+                    best = dist;
+                    hit = obj;
+                }
+            }
+            
+            current.add(dir.mul(best, new Vector2f()));
+            if (best < 0.1)
+            {
+                return hit;
+            }
+            
+            if (isOffscreen(current, screenBounds))
+            {
+                return null;
+            }
+        }
     }
     
     private boolean isOffscreen(Vector2f current, Vector2i screenBounds)
@@ -72,4 +131,5 @@ public class RayMarcher
         glColor4f(1, 1, 1, 1);
         glPopMatrix();
     }
+    
 }
