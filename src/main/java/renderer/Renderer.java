@@ -9,21 +9,16 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class Renderer
+public abstract class Renderer
 {
-    private int width  = 800;
-    private int height = 600;
+    protected int width  = 800;
+    protected int height = 600;
     
-    private final Vector2f cursor = new Vector2f();
-    private final Object   lock   = new Object();
+    protected final Vector2f cursor = new Vector2f();
+    private final   Object   lock   = new Object();
     
     private long    window;
     private boolean shouldClose;
-    
-    public static void main(String[] args)
-    {
-        new Renderer().run();
-    }
     
     public void run()
     {
@@ -48,6 +43,13 @@ public class Renderer
             glfwTerminate();
             glfwSetErrorCallback(null).free();
         }
+    }
+    
+    public void setWindowSize(Vector2i size)
+    {
+        this.width = size.x;
+        this.height = size.y;
+        glfwSetWindowSize(window, width, height);
     }
     
     private void init()
@@ -103,7 +105,7 @@ public class Renderer
         int ups = 0;
         int fps = 0;
         
-        int   loops;
+        int loops;
         
         double timer    = System.currentTimeMillis();
         long   fpstimer = System.currentTimeMillis();
@@ -146,23 +148,9 @@ public class Renderer
         }
     }
     
-    private void initPostGL()
-    {
-        // init here
-    }
+    public abstract void initPostGL();
     
-    private void update()
-    {
-        // logic here
-    }
+    public abstract void update();
     
-    private void render()
-    {
-        Shapes.drawTriangle(new Vector2f(width / 2, height / 2), 50);
-        glTranslatef(width / 2f, height / 2f, 0);
-        glRotatef(1f, 0, 0, 1);
-        glTranslatef(-width / 2f, -height / 2f, 0);
-    }
-    
-    
+    public abstract void render();
 }
