@@ -59,7 +59,7 @@ public final class Shapes
     {
         glBegin(GL_LINE_LOOP);
         
-        int quality = 300;
+        int quality = 360;
         
         for (int i = 0; i <= quality; i++)
         {

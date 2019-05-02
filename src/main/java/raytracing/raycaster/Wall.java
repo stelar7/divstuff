@@ -1,4 +1,4 @@
-package raytracing;
+package raytracing.raycaster;
 
 import org.joml.Vector2f;
 import renderer.Shapes;

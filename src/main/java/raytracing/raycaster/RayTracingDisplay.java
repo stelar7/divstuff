@@ -1,4 +1,4 @@
-package raytracing;
+package raytracing.raycaster;
 
 import org.joml.*;
 import renderer.*;
@@ -31,17 +31,17 @@ public class RayTracingDisplay extends Renderer
         
         for (int i = 0; i < 5; i++)
         {
-            float x1 = ThreadLocalRandom.current().nextInt(width);
-            float x2 = ThreadLocalRandom.current().nextInt(width);
-            float y1 = ThreadLocalRandom.current().nextInt(height);
-            float y2 = ThreadLocalRandom.current().nextInt(height);
+            float x1 = ThreadLocalRandom.current().nextInt(screenBounds.x);
+            float x2 = ThreadLocalRandom.current().nextInt(screenBounds.x);
+            float y1 = ThreadLocalRandom.current().nextInt(screenBounds.y);
+            float y2 = ThreadLocalRandom.current().nextInt(screenBounds.y);
             
             walls.add(new Wall(new Vector2f(x1, y1), new Vector2f(x2, y2)));
         }
-        walls.add(new Wall(new Vector2f(0, 0), new Vector2f(width, 0)));
-        walls.add(new Wall(new Vector2f(width, 0), new Vector2f(width, height)));
-        walls.add(new Wall(new Vector2f(width, height), new Vector2f(0, height)));
-        walls.add(new Wall(new Vector2f(0, height), new Vector2f(0, 0)));
+        walls.add(new Wall(new Vector2f(0, 0), new Vector2f(screenBounds.x, 0)));
+        walls.add(new Wall(new Vector2f(screenBounds.x, 0), new Vector2f(screenBounds.x, screenBounds.y)));
+        walls.add(new Wall(new Vector2f(screenBounds.x, screenBounds.y), new Vector2f(0, screenBounds.y)));
+        walls.add(new Wall(new Vector2f(0, screenBounds.y), new Vector2f(0, 0)));
         
     }
     
@@ -61,10 +61,10 @@ public class RayTracingDisplay extends Renderer
         caster.render();
         
         this.points.forEach(p -> {
-            glColor4f(1,1,1,0.5f);
+            glColor4f(1, 1, 1, 0.5f);
             Shapes.drawLine(caster.pos, p, 1);
             Shapes.drawFilledCircle(p, 6);
-            glColor4f(1,1,1,1);
+            glColor4f(1, 1, 1, 1);
         });
     }
 }

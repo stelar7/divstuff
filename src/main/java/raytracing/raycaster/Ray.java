@@ -1,4 +1,4 @@
-package raytracing;
+package raytracing.raycaster;
 
 import org.joml.Vector2f;
 import renderer.Shapes;
@@ -25,9 +25,14 @@ public class Ray
     
     public void render()
     {
+        render(10);
+    }
+    
+    public void render(float distance)
+    {
         glPushMatrix();
         glTranslatef(this.pos.x, this.pos.y, 0);
-        Shapes.drawLine(new Vector2f(0), this.dir.mul(10, new Vector2f()), 1);
+        Shapes.drawLine(new Vector2f(0), this.dir.mul(distance, new Vector2f()), 1);
         glPopMatrix();
     }
     
@@ -69,4 +74,5 @@ public class Ray
         
         return null;
     }
+    
 }

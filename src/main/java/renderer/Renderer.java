@@ -11,8 +11,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public abstract class Renderer
 {
-    protected int width  = 800;
-    protected int height = 600;
+    protected Vector2i screenBounds = new Vector2i(800, 600);
     
     protected final Vector2f cursor = new Vector2f();
     private final   Object   lock   = new Object();
@@ -47,9 +46,8 @@ public abstract class Renderer
     
     public void setWindowSize(Vector2i size)
     {
-        this.width = size.x;
-        this.height = size.y;
-        glfwSetWindowSize(window, width, height);
+        this.screenBounds = size;
+        glfwSetWindowSize(window, size.x, size.y);
     }
     
     private void init()
@@ -65,7 +63,7 @@ public abstract class Renderer
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         
-        window = glfwCreateWindow(width, height, "Basic Renderer!", NULL, NULL);
+        window = glfwCreateWindow(screenBounds.x, screenBounds.y, "Basic Renderer!", NULL, NULL);
         if (window == NULL)
         {
             throw new RuntimeException("Failed to create the GLFW window");
@@ -77,15 +75,15 @@ public abstract class Renderer
                                        {
                                            if (w > 0 && h > 0)
                                            {
-                                               width = w;
-                                               height = h;
+                                               screenBounds.x = w;
+                                               screenBounds.y = h;
                                            }
                                        }
                                       );
         
         
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-        glfwSetWindowPos(window, (vidmode.width() - width) / 2, (vidmode.height() - width) / 2);
+        glfwSetWindowPos(window, (vidmode.width() - screenBounds.x) / 2, (vidmode.height() - screenBounds.y) / 2);
         
         glfwShowWindow(window);
     }
@@ -110,9 +108,9 @@ public abstract class Renderer
         double timer    = System.currentTimeMillis();
         long   fpstimer = System.currentTimeMillis();
         
-        glOrtho(0, width, height, 0, 1, -1);
+        glOrtho(0, screenBounds.x, screenBounds.y, 0, 1, -1);
         glEnable(GL_DEPTH_TEST);
-        glViewport(0, 0, width, height);
+        glViewport(0, 0, screenBounds.x, screenBounds.y);
         
         while (!shouldClose)
         {
