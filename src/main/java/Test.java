@@ -90,7 +90,7 @@ public class Test
         
         System.out.println("Outputting missing anime");
         
-        for (int i = 0; i <= 400; i++)
+        for (int i = 400; i <= 500; i++)
         {
             if (!ids.contains(i))
             {
