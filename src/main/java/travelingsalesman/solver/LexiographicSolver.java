@@ -1,9 +1,9 @@
 package travelingsalesman.solver;
 
-import org.joml.*;
-import renderer.*;
+import org.joml.Vector2f;
+import renderer.Shapes;
 
-import java.util.*;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 

@@ -1,6 +1,6 @@
 package travelingsalesman.solver;
 
-import org.joml.*;
+import org.joml.Vector2f;
 
 import java.util.*;
 

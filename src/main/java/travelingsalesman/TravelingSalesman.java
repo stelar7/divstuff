@@ -1,12 +1,12 @@
 package travelingsalesman;
 
-import org.joml.*;
+import org.joml.Vector2f;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
-import renderer.*;
+import renderer.Shapes;
 import travelingsalesman.solver.*;
 
-import java.text.*;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -16,14 +16,14 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class TravelingSalesman
 {
-    private final Object         lock   = new Object();
-    private       List<Vector2f> cities = new ArrayList<>();
-    private       Random         random = new Random();
-    private TravelingSalesmanSolver solver;
-    private long                    window;
-    private int      WIDTH  = 800;
-    private int      HEIGHT = 600;
-    private Vector2f cursor = new Vector2f();
+    private final Object                  lock   = new Object();
+    private       List<Vector2f>          cities = new ArrayList<>();
+    private       Random                  random = new Random();
+    private       TravelingSalesmanSolver solver;
+    private       long                    window;
+    private       int                     WIDTH  = 800;
+    private       int                     HEIGHT = 600;
+    private       Vector2f                cursor = new Vector2f();
     
     private boolean shouldClose = false;
     
